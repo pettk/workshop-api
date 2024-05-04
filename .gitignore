@@ -1,0 +1,19 @@
+# Ignore compiled Python files
+*.pyc
+__pycache__
+
+# Ignore local development settings
+.env
+
+# Ignore the virtual environment
+venv/
+env/
+ENV/
+
+# Ignore local database files
+db.sqlite3
+*.sqlite3
+
+# Ignore logs and other generated files
+*.log
+logs/
