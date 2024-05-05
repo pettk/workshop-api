@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+# for token
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
@@ -10,7 +11,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         return token
     
-
+# for post and put request field
 class RequestBody(serializers.Serializer):
     
     Seed_RepDate =  serializers.IntegerField()

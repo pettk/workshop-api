@@ -4,16 +4,16 @@ from .models import seed
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializer import CustomTokenObtainPairSerializer, RequestBody
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import permissions
+from rest_framework import permissions, status
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
-
+#only "admin1" can do all actions
 class AccountPermission(permissions.BasePermission):
 
-    def has_permission(self, request):
+    def has_permission(self, request, view):
         if request.user.is_authenticated:
             if request.user.username == 'admin1':
                 return True
@@ -24,7 +24,7 @@ class AccountPermission(permissions.BasePermission):
                     return False
 
 class SeedsList(APIView):
-    permission_classes = [IsAuthenticated & AccountPermission]
+    permission_classes = [IsAuthenticated, AccountPermission]
     serializer_class = RequestBody
 
     def get(self, request):
@@ -38,6 +38,8 @@ class SeedsList(APIView):
             seed_data["_id"] = self.get_next_id()
             inserted_product = seed.insert_one(seed_data)
             return Response({"message": "Product added successfully", "new_data": str(inserted_product)})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def get_next_id(self):
  
@@ -53,7 +55,7 @@ class SeedsList(APIView):
         return next_id
 
 class SeedDetail(APIView):
-    permission_classes = [IsAuthenticated & AccountPermission]
+    permission_classes = [IsAuthenticated, AccountPermission]
     serializer_class = RequestBody
     
     def get(self, request, pk):
