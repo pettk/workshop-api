@@ -37,7 +37,7 @@ class SeedsList(APIView):
             seed_data = serializer.validated_data
             seed_data["_id"] = self.get_next_id()
             inserted_product = seed.insert_one(seed_data)
-            return Response({"message": "Product added successfully", "new_data": str(inserted_product)})
+            return Response({"message": "Added successfully"})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -64,15 +64,15 @@ class SeedDetail(APIView):
         if seed_find:
             return Response(seed_find)
         else:
-            return Response({"message": "Product not found"}, status=404)
+            return Response({"message": "Not found"}, status=404)
 
     def put(self, request, pk):
         serializer = RequestBody(data = request.data)
         if serializer.is_valid():
             seed_data = serializer.validated_data
             seed.replace_one({"_id": (pk)}, seed_data)
-            return Response({"message": "Product updated successfully"})
+            return Response({"message": "Updated successfully"})
 
     def delete(self, request, pk):
         seed.delete_one({"_id": (pk)})
-        return Response({"message": "Product deleted successfully"})
+        return Response({"message": "Deleted successfully"})
